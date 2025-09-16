@@ -1,0 +1,60 @@
+import java.util.*;
+
+public class lc {
+
+    // Function to find LCS string
+    public static String findLCS(String s1, String s2) {
+        int m = s1.length();
+        int n = s2.length();
+
+        // DP table (m+1) x (n+1)
+        int[][] dp = new int[m + 1][n + 1];
+
+        // Fill DP table
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (s1.charAt(i - 1) == s2.charAt(j - 1))
+                    dp[i][j] = dp[i - 1][j - 1] + 1; // match → add 1
+                else
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]); // else take max
+            }
+        }
+
+        // Reconstruct LCS string from table
+        StringBuilder lcs = new StringBuilder();
+        int i = m, j = n;
+        while (i > 0 && j > 0) {
+            if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
+                lcs.append(s1.charAt(i - 1)); // add to result
+                i--;
+                j--;
+            } else if (dp[i - 1][j] > dp[i][j - 1]) {
+                i--; // move up
+            } else {
+                j--; // move left
+            }
+        }
+
+        return lcs.reverse().toString(); // reverse since built backwards
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        // Input Strings
+        System.out.print("Enter String 1 : ");
+        String str1 = sc.nextLine();
+
+        System.out.print("Enter String 2 : ");
+        String str2 = sc.nextLine();
+
+        // Call LCS function
+        String lcs = findLCS(str1, str2);
+
+        // Output results
+        System.out.println("LCS : " + lcs);
+        System.out.println("Length : " + lcs.length());
+
+        sc.close();
+    }
+}
