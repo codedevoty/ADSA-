@@ -1,0 +1,80 @@
+
+#include <iostream>
+#include<limits.h>
+using namespace std;
+#define V  4
+
+
+int minDist(int arr[], bool sptSet[]){
+    int min = INT_MAX , min_index = -1;
+    for(int i = 0 ; i < V ;i++){
+        if(!sptSet[i]  && arr[i] <= min){
+           min = arr[i];
+           min_index = i;
+        }
+        
+    }
+    return min_index;
+}
+
+void printSolution(int arr[]){
+    cout << "Vertex "<< "\t" <<" distance from Source ";
+    for(int i = 0 ; i < V ; i++){
+        cout<< i << "  "<< "\t\t\t" << arr[i]<< "\n";
+    }
+}
+
+// src is source node
+// arr[v] display shortest path from source node to that particular node
+// sptSet[] checks vertex inculded or not
+void dijkstra(int graph[V][V] , int src){
+    int arr[V];
+    bool sptSet[V];
+    // Initialize all dist infinite and sptSet as False
+    for(int i = 0 ; i< V ; i++){
+        arr[i] = INT_MAX ;
+        sptSet[i] =false;
+    }
+      arr[src] = 0;
+    // find shortest path of all vertices 
+    for(int count = 0 ; count < V-1 ; count++){
+        int u = minDist(arr,sptSet);
+        sptSet[u] = true;// picked that u which have min dist
+        
+    //update dist value of current vertices
+    for(int v = 0; v < V ; v++){
+        if(
+        !sptSet[v] && graph[u][v]
+           && arr[u] != INT_MAX
+           && arr[u]+graph[u][v] < arr[v]
+          )
+          
+          arr[v] = arr[u]+graph[u][v];
+    }
+        
+    }
+        printSolution(arr);
+}
+
+
+
+int main() {
+    
+  int src ; 
+  cout << "enter the source vertex (0 to " << V-1 <<" ) : ";
+  cin >> src;
+  cout<<endl;
+  
+  int graph[V][V];
+ 
+  // Take the adjacent matrix
+   cout << "Enter adjacency matrix (" << V << "x" << V << "), enter 0 if no edge:\n";
+    for(int i = 0 ; i < V ; i++){
+        for(int j = 0 ; j < V ; j++){
+            cin >> graph[i][j];
+        }
+    }
+  
+   dijkstra(graph, src);
+    return 0;
+}
