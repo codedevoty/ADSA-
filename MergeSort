@@ -1,0 +1,64 @@
+import java.util.*;
+
+public class MergeSort{
+
+    // Function to merge two sorted subarrays
+    public static void merge(int arr[], int lb , int mid , int ub){
+        int i  = lb; // start of the fist subarray
+        int j = mid+1; // start of the second subarray
+        int k = 0 ; // Index of temp array
+        int temp[] = new int[ub-lb+1]; // temp  array to hold merged elements
+        
+        // merge the two subaarays into temp
+        while(i <= mid && j <= ub){
+            if(arr[i] <= arr[j]){
+                temp[k++] = arr[i++];
+            }
+            else{
+                temp[k++] = arr[j++];
+                
+            }
+        }
+        // Copy remaining elements from left
+        while(i <= mid){
+             temp[k++] = arr[i++];
+          
+        }
+        // copy remaining array from right
+        while(j <= ub){
+            temp[k++] = arr[j++];
+
+        }
+        // merge back to original array
+        for( k = 0  ; k < temp.length ; k++){
+            arr[lb+k] = temp[k];
+        }
+
+    }
+
+   // Recursive Function to Divide array
+   public static void mergeSort(int arr[] , int low , int high){
+       if(low <  high) {
+        int mid = (low+high)/2;
+        mergeSort(arr, low, mid);
+        mergeSort(arr, mid+1, high);
+        merge(arr,low,mid,high);
+   }
+}
+    
+   public static void main(String[] args){
+    Scanner sc = new Scanner(System.in);
+    System.out.print("Enter the Size of the array : ");
+    int size = sc.nextInt();
+    int arr[] = new int[size];
+      for(int i = 0 ; i < size ; i++){
+        System.out.print("Enter element at index "+ i+ " : ");
+        arr[i] = sc.nextInt();
+      }
+     mergeSort(arr,0,arr.length-1);
+     // print Sorted Array
+     for(int x : arr) System.out.print(x + " ");
+   }
+
+
+}
